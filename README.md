@@ -53,6 +53,9 @@
 - **🗄️ Multi-Database Environments & Switching:**
   - Seamlessly switch active target databases on the fly (`ai_sql_assistant`, `ai_sql_warehouse`, custom user databases).
   - Admin-only database creation and deletion with protected system schemas safeguard.
+- **📜 Role-Isolated Query Execution History & Audit Log:**
+  - **Strict User/Role Privacy:** Readers and Writers only see their own audited queries. Zero data leakage across roles.
+  - **Admin Unified Oversight:** Admins can view all query executions across all roles with dynamic role filter pills (`📖 Reader`, `✍️ Writer`, `👑 Admin`), execution latency metrics, affected rows, and 1-click JSON export.
 - **⚡ Production-Grade Security & Performance:**
   - `express-rate-limit` prevents DoS attacks and Gemini API token exhaustion.
   - `helmet` secures HTTP response headers.
@@ -170,6 +173,15 @@ This project leverages **LangChain Core (`@langchain/core`)** and **Google GenAI
 *Create new databases and manage environments with Admin-Only deletion guards.*
 
 <img src="docs/screenshots/db-environments.png" alt="Database Environments" width="900" style="border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);" />
+
+---
+
+### 6. Role-Isolated Query Execution History & Enterprise Audit Trail
+*User/Role-isolated query history: Readers and Writers only see their own query executions, while Admins view and filter across all roles with user attribution badges and 1-click JSON export.*
+
+| 👑 Admin Unified Audit View (All Roles & Filters) | 📖 Reader Isolated View (Self Queries Only) |
+| :---: | :---: |
+| <img src="docs/screenshots/query-history.png" alt="Admin Unified Query History" width="440" style="border-radius: 8px;" /> | <img src="docs/screenshots/reader-query-history.png" alt="Reader Isolated Query History" width="440" style="border-radius: 8px;" /> |
 
 </div>
 

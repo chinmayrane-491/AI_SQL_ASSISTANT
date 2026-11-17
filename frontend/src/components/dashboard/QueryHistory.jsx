@@ -15,27 +15,35 @@ import {
   Database,
   Filter,
   Sparkles,
+  Shield,
+  User,
 } from "lucide-react";
 import GlassCard from "../common/GlassCard";
 import Button from "../common/Button";
 import { getQueryHistory, clearQueryHistory } from "../../services/history.service";
 import { useDatabase } from "../../context/DatabaseContext";
+import { useAuth } from "../../context/AuthContext";
 import "./QueryHistory.css";
 
 export default function QueryHistory({ onRunInChat }) {
   const { activeDb } = useDatabase();
+  const { user } = useAuth();
+  const currentRole = (user?.role || "reader").toLowerCase();
+
   const [historyItems, setHistoryItems] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedOperation, setSelectedOperation] = useState("ALL");
   const [selectedDb, setSelectedDb] = useState("ALL");
+  const [selectedRoleFilter, setSelectedRoleFilter] = useState("ALL");
   const [copiedId, setCopiedId] = useState(null);
 
   useEffect(() => {
     loadHistory();
-  }, []);
+  }, [user]);
 
   const loadHistory = () => {
-    const items = getQueryHistory();
+    // getQueryHistory automatically isolates reader/writer to only their queries, and gives admin all queries
+    const items = getQueryHistory(user);
     setHistoryItems(items);
   };
 
@@ -56,22 +64,31 @@ export default function QueryHistory({ onRunInChat }) {
     const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(historyItems, null, 2));
     const downloadAnchor = document.createElement("a");
     downloadAnchor.setAttribute("href", dataStr);
-    downloadAnchor.setAttribute("download", `ai_sql_query_history_${new Date().toISOString().split("T")[0]}.json`);
+    downloadAnchor.setAttribute("download", `ai_sql_query_history_${currentRole}_${new Date().toISOString().split("T")[0]}.json`);
     document.body.appendChild(downloadAnchor);
     downloadAnchor.click();
     downloadAnchor.remove();
   };
 
-  // Filter items based on search query, operation, and db
+  // Filter items based on search query, operation, db, and admin role selector
   const filteredItems = historyItems.filter((item) => {
     const matchesSearch =
       item.question.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.sql.toLowerCase().includes(searchQuery.toLowerCase());
+      item.sql.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (item.userEmail && item.userEmail.toLowerCase().includes(searchQuery.toLowerCase()));
+
     const matchesOp =
       selectedOperation === "ALL" ||
       item.operation.toUpperCase() === selectedOperation.toUpperCase();
+
     const matchesDb = selectedDb === "ALL" || item.database === selectedDb;
-    return matchesSearch && matchesOp && matchesDb;
+
+    const matchesRole =
+      currentRole !== "admin" ||
+      selectedRoleFilter === "ALL" ||
+      (item.role || "reader").toLowerCase() === selectedRoleFilter.toLowerCase();
+
+    return matchesSearch && matchesOp && matchesDb && matchesRole;
   });
 
   // Group items day-wise
@@ -116,9 +133,25 @@ export default function QueryHistory({ onRunInChat }) {
       {/* Top Header & Metrics */}
       <div className="history-header-row">
         <div>
-          <h1 className="history-main-title">Query Execution History</h1>
+          <h1 className="history-main-title">
+            {currentRole === "admin"
+              ? "Enterprise Audit Log (All Roles)"
+              : `${currentRole.charAt(0).toUpperCase() + currentRole.slice(1)} Query History`}
+          </h1>
           <p className="history-subtitle">
-            Day-wise audit log of natural language questions converted into verified SQL for <strong>{activeDb}</strong>.
+            {currentRole === "admin" ? (
+              <>
+                Administrator audit trail displaying <strong>all SQL queries</strong> across Reader, Writer, and Admin workspaces on <strong>{activeDb}</strong>.
+              </>
+            ) : currentRole === "writer" ? (
+              <>
+                Audited query history for <strong>{user?.email || "Writer User"}</strong> (Permitted: SELECT, INSERT, UPDATE, DELETE).
+              </>
+            ) : (
+              <>
+                Audited query history for <strong>{user?.email || "Reader User"}</strong> (Permitted: Strict Read-Only SELECT).
+              </>
+            )}
           </p>
         </div>
 
@@ -131,6 +164,36 @@ export default function QueryHistory({ onRunInChat }) {
           </Button>
         </div>
       </div>
+
+      {/* Admin Privilege Banner with Role Switch Filter */}
+      {currentRole === "admin" && (
+        <div className="admin-role-filter-banner fade-in-up">
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <Shield size={16} color="#7C3AED" />
+            <span>
+              <strong>Admin Privilege Mode:</strong> You can see all executions across every user role. Filter by role:
+            </span>
+          </div>
+
+          <div className="role-filter-pills">
+            {[
+              { id: "ALL", label: "All Roles" },
+              { id: "READER", label: "📖 Reader Queries" },
+              { id: "WRITER", label: "✍️ Writer Queries" },
+              { id: "ADMIN", label: "👑 Admin Queries" },
+            ].map((rf) => (
+              <button
+                key={rf.id}
+                type="button"
+                className={`filter-pill ${selectedRoleFilter === rf.id ? "filter-pill--active" : ""}`}
+                onClick={() => setSelectedRoleFilter(rf.id)}
+              >
+                {rf.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Metrics Bar */}
       <div className="history-metrics-bar">
@@ -169,7 +232,7 @@ export default function QueryHistory({ onRunInChat }) {
             <Database size={18} />
           </div>
           <div>
-            <span className="hist-metric-lbl">Active Database</span>
+            <span className="hist-metric-lbl">Target Database</span>
             <span className="hist-metric-val hist-metric-val--db">{activeDb}</span>
           </div>
         </GlassCard>
@@ -181,7 +244,7 @@ export default function QueryHistory({ onRunInChat }) {
           <Search size={16} className="search-icon" />
           <input
             type="text"
-            placeholder="Search questions or SQL commands..."
+            placeholder="Search questions, SQL commands, or user email..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="search-input"
@@ -191,7 +254,7 @@ export default function QueryHistory({ onRunInChat }) {
         <div className="toolbar-filters-group">
           {/* Operation Filter Pills */}
           <div className="filter-pills-row">
-            {["ALL", "SELECT", "INSERT", "UPDATE", "DELETE"].map((op) => (
+            {["ALL", "SELECT", "SHOW", "INSERT", "UPDATE", "DELETE"].map((op) => (
               <button
                 key={op}
                 type="button"
@@ -221,11 +284,13 @@ export default function QueryHistory({ onRunInChat }) {
         {Object.keys(groupedHistory).length === 0 ? (
           <GlassCard padding="large" className="empty-history-card">
             <Terminal size={36} className="empty-icon" />
-            <h3>No Queries Found</h3>
+            <h3>No Queries Found for {currentRole.toUpperCase()}</h3>
             <p>
               {searchQuery
                 ? `No execution records match "${searchQuery}". Try adjusting your filters.`
-                : "Ask questions in the AI SQL Chat tab to generate and execute queries."}
+                : currentRole === "admin"
+                ? "No queries have been executed across workspaces yet. Ask questions in AI SQL Chat to record history."
+                : `You haven't run any queries as ${currentRole.toUpperCase()} yet. Ask questions in the AI SQL Chat tab to generate and execute queries.`}
             </p>
           </GlassCard>
         ) : (
@@ -235,91 +300,106 @@ export default function QueryHistory({ onRunInChat }) {
               <div className="day-divider-pill">
                 <Calendar size={13} />
                 <span>{dayLabel}</span>
-                <span className="day-count-badge">{items.length} {items.length === 1 ? "query" : "queries"}</span>
+                <span className="day-count-badge">
+                  {items.length} {items.length === 1 ? "query" : "queries"}
+                </span>
               </div>
 
               {/* Items in this day */}
               <div className="history-cards-list">
-                {items.map((item) => (
-                  <GlassCard key={item.id} padding="default" className="history-item-card">
-                    <div className="history-item-header">
-                      <div className="question-info">
-                        <div className="question-sparkle">
-                          <Sparkles size={16} />
+                {items.map((item) => {
+                  const itemRole = (item.role || "reader").toLowerCase();
+                  return (
+                    <GlassCard key={item.id} padding="default" className="history-item-card">
+                      <div className="history-item-header">
+                        <div className="question-info">
+                          <div className="question-sparkle">
+                            <Sparkles size={16} />
+                          </div>
+                          <h3 className="history-question-text">{item.question}</h3>
                         </div>
-                        <h3 className="history-question-text">{item.question}</h3>
+
+                        <div className="history-badges-row">
+                          {/* Role Badge */}
+                          <span className={`role-tag role-tag--${itemRole}`}>
+                            {itemRole === "admin" ? "👑 Admin" : itemRole === "writer" ? "✍️ Writer" : "📖 Reader"}
+                          </span>
+
+                          <span className={`op-tag op-tag--${(item.operation || "select").toLowerCase()}`}>
+                            {item.operation || "SELECT"}
+                          </span>
+
+                          <span className="db-tag">
+                            <Database size={11} />
+                            {item.database}
+                          </span>
+
+                          <span className={`status-tag status-tag--${item.status}`}>
+                            {item.status === "success" ? <CheckCircle2 size={12} /> : <XCircle size={12} />}
+                            {item.status}
+                          </span>
+                        </div>
                       </div>
 
-                      <div className="history-badges-row">
-                        <span className={`op-tag op-tag--${item.operation.toLowerCase()}`}>
-                          {item.operation}
-                        </span>
-                        <span className="db-tag">
-                          <Database size={11} />
-                          {item.database}
-                        </span>
-                        <span className={`status-tag status-tag--${item.status}`}>
-                          {item.status === "success" ? <CheckCircle2 size={12} /> : <XCircle size={12} />}
-                          {item.status}
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* SQL Preview Box */}
-                    <div className="history-sql-box">
-                      <code>{item.sql}</code>
-                    </div>
-
-                    {/* Card Footer: Metadata & Quick Actions */}
-                    <div className="history-item-footer">
-                      <div className="footer-meta">
-                        <span className="meta-time">
-                          <Clock size={12} />
-                          {item.timestamp}
-                        </span>
-                        <span className="meta-dot">&bull;</span>
-                        <span className="meta-latency">{item.executionTimeMs || 42}ms execution</span>
-                        <span className="meta-dot">&bull;</span>
-                        <span className="meta-rows">{item.rowCount || 0} rows</span>
-                        <span className="meta-dot">&bull;</span>
-                        <span className="meta-role">Role: {item.role}</span>
+                      {/* SQL Preview Box */}
+                      <div className="history-sql-box">
+                        <code>{item.sql}</code>
                       </div>
 
-                      <div className="footer-actions">
-                        <button
-                          type="button"
-                          onClick={() => handleCopy(item.id, item.sql)}
-                          className="action-link-btn"
-                          title="Copy SQL"
-                        >
-                          {copiedId === item.id ? (
-                            <>
-                              <Check size={14} className="copied-icon" />
-                              <span className="copied-text">Copied</span>
-                            </>
-                          ) : (
-                            <>
-                              <Copy size={14} />
-                              <span>Copy SQL</span>
-                            </>
-                          )}
-                        </button>
+                      {/* Card Footer: Metadata & Quick Actions */}
+                      <div className="history-item-footer">
+                        <div className="footer-meta">
+                          <span className="meta-time">
+                            <Clock size={12} />
+                            {item.timestamp}
+                          </span>
+                          <span className="meta-dot">&bull;</span>
+                          <span className="meta-latency">{item.executionTimeMs || 42}ms execution</span>
+                          <span className="meta-dot">&bull;</span>
+                          <span className="meta-rows">{item.rowCount || 0} rows</span>
+                          <span className="meta-dot">&bull;</span>
+                          <span className="user-tag" title="Executed By">
+                            <User size={11} />
+                            {item.userEmail || `${itemRole}@aisql.com`}
+                          </span>
+                        </div>
 
-                        {onRunInChat && (
+                        <div className="footer-actions">
                           <button
                             type="button"
-                            onClick={() => onRunInChat(item.question)}
-                            className="action-link-btn action-link-btn--primary"
-                            title="Run again in AI Chat"
+                            onClick={() => handleCopy(item.id, item.sql)}
+                            className="action-link-btn"
+                            title="Copy SQL"
                           >
-                            <Play size={13} />
-                            <span>Ask in Chat</span>
+                            {copiedId === item.id ? (
+                              <>
+                                <Check size={14} className="copied-icon" />
+                                <span className="copied-text">Copied</span>
+                              </>
+                            ) : (
+                              <>
+                                <Copy size={14} />
+                                <span>Copy SQL</span>
+                              </>
+                            )}
                           </button>
-                        )}
+
+                          {onRunInChat && (
+                            <button
+                              type="button"
+                              onClick={() => onRunInChat(item.question)}
+                              className="action-link-btn action-link-btn--primary"
+                              title="Run again in AI Chat"
+                            >
+                              <Play size={13} />
+                              <span>Ask in Chat</span>
+                            </button>
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  </GlassCard>
-                ))}
+                    </GlassCard>
+                  );
+                })}
               </div>
             </div>
           ))

@@ -19,6 +19,7 @@ import GlassCard from "../common/GlassCard";
 import Button from "../common/Button";
 import apiClient from "../../services/api";
 import { useDatabase } from "../../context/DatabaseContext";
+import { useAuth } from "../../context/AuthContext";
 import { addQueryHistoryEntry } from "../../services/history.service";
 import "./ChatWorkspace.css";
 
@@ -55,6 +56,7 @@ const getInitialWelcomeMessage = (role, activeDb) => ({
 
 export default function ChatWorkspace({ role = "reader", initialQuestion = "" }) {
   const { activeDb } = useDatabase();
+  const { user } = useAuth();
   const storageKey = `ai_sql_chat_v2_${activeDb}_${role}`;
 
   const [messages, setMessages] = useState(() => {
@@ -275,6 +277,19 @@ export default function ChatWorkspace({ role = "reader", initialQuestion = "" })
             query
           );
         } else {
+          // Record successful safe query into query history
+          addQueryHistoryEntry({
+            question: query,
+            sql: result.sql,
+            database: activeDb,
+            role: role,
+            userEmail: user?.email || `${role}@aisql.com`,
+            userName: user?.displayName || role,
+            rowCount: result.rowCount || 0,
+            operation: result.operation || "SELECT",
+            status: "success",
+          });
+
           streamBotResponse(
             {
               text: result.explanation || "Query generated and executed successfully against active database.",
@@ -343,7 +358,10 @@ export default function ChatWorkspace({ role = "reader", initialQuestion = "" })
         sql: msg.sql,
         database: activeDb,
         role: role,
+        userEmail: user?.email || `${role}@aisql.com`,
+        userName: user?.displayName || role,
         rowCount: res.data?.data?.affectedRows || 0,
+        operation: msg.operation,
         status: "success",
       });
     } catch (err) {

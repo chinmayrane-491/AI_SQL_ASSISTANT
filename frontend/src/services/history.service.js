@@ -9,6 +9,8 @@ const INITIAL_SEEDS = [
     sql: "SELECT id, product_name, price, category, stock FROM products ORDER BY price DESC LIMIT 5;",
     database: "ai_sql_assistant",
     role: "reader",
+    userEmail: "reader@aisql.com",
+    userName: "reader",
     operation: "SELECT",
     rowCount: 5,
     executionTimeMs: 42,
@@ -22,6 +24,8 @@ const INITIAL_SEEDS = [
     sql: "SELECT c.id, c.name, c.email, COUNT(o.id) AS total_orders FROM customers c LEFT JOIN orders o ON c.id = o.customer_id GROUP BY c.id, c.name, c.email ORDER BY total_orders DESC;",
     database: "ai_sql_assistant",
     role: "admin",
+    userEmail: "admin@aisql.com",
+    userName: "admin",
     operation: "SELECT",
     rowCount: 12,
     executionTimeMs: 68,
@@ -35,6 +39,8 @@ const INITIAL_SEEDS = [
     sql: "SELECT c.id, c.name, c.email FROM customers c LEFT JOIN orders o ON c.id = o.customer_id WHERE o.id IS NULL;",
     database: "ai_sql_assistant",
     role: "writer",
+    userEmail: "writer@aisql.com",
+    userName: "writer",
     operation: "SELECT",
     rowCount: 3,
     executionTimeMs: 35,
@@ -48,6 +54,8 @@ const INITIAL_SEEDS = [
     sql: "SELECT status, COUNT(*) AS count FROM orders GROUP BY status;",
     database: "ai_sql_assistant",
     role: "admin",
+    userEmail: "admin@aisql.com",
+    userName: "admin",
     operation: "SELECT",
     rowCount: 4,
     executionTimeMs: 29,
@@ -61,6 +69,8 @@ const INITIAL_SEEDS = [
     sql: "UPDATE customers SET status = 'active' WHERE id = 102;",
     database: "ai_sql_assistant",
     role: "writer",
+    userEmail: "writer@aisql.com",
+    userName: "writer",
     operation: "UPDATE",
     rowCount: 1,
     executionTimeMs: 54,
@@ -68,16 +78,50 @@ const INITIAL_SEEDS = [
     timestamp: "11:20 AM",
     date: new Date(Date.now() - 86400000).toISOString().split("T")[0], // Yesterday
   },
+  {
+    id: "hist_6",
+    question: "Show all database tables",
+    sql: "SHOW TABLES;",
+    database: "ai_sql_assistant",
+    role: "reader",
+    userEmail: "reader@aisql.com",
+    userName: "reader",
+    operation: "SHOW",
+    rowCount: 6,
+    executionTimeMs: 18,
+    status: "success",
+    timestamp: "10:05 AM",
+    date: new Date().toISOString().split("T")[0],
+  },
 ];
 
-export const getQueryHistory = () => {
+export const getQueryHistory = (currentUser = null) => {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
+    let items = [];
     if (!raw) {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(INITIAL_SEEDS));
-      return INITIAL_SEEDS;
+      items = INITIAL_SEEDS;
+    } else {
+      items = JSON.parse(raw);
     }
-    return JSON.parse(raw);
+
+    if (!currentUser) return items;
+
+    const role = (currentUser.role || "reader").toLowerCase();
+    // Admin sees all queries
+    if (role === "admin") {
+      return items;
+    }
+
+    // Reader & Writer see only queries executed by their role/user
+    return items.filter((item) => {
+      const itemRole = (item.role || "reader").toLowerCase();
+      if (currentUser.email && item.userEmail && item.userEmail.toLowerCase() === currentUser.email.toLowerCase()) {
+        return true;
+      }
+      return itemRole === role;
+    });
   } catch (e) {
     console.error("Failed to parse query history:", e);
     return INITIAL_SEEDS;
@@ -86,13 +130,16 @@ export const getQueryHistory = () => {
 
 export const addQueryHistoryEntry = (entry) => {
   try {
-    const history = getQueryHistory();
+    const raw = localStorage.getItem(STORAGE_KEY);
+    const history = raw ? JSON.parse(raw) : INITIAL_SEEDS;
     const newEntry = {
       id: `hist_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
       question: entry.question || "Natural Language Query",
       sql: entry.sql || "",
       database: entry.database || "ai_sql_assistant",
-      role: entry.role || "reader",
+      role: (entry.role || "reader").toLowerCase(),
+      userEmail: entry.userEmail || `${entry.role || "reader"}@aisql.com`,
+      userName: entry.userName || entry.role || "User",
       operation: entry.operation || detectOperation(entry.sql),
       rowCount: entry.rowCount ?? 0,
       executionTimeMs: entry.executionTimeMs || Math.floor(Math.random() * 45) + 20,
@@ -120,6 +167,8 @@ export const clearQueryHistory = () => {
 const detectOperation = (sql = "") => {
   const trimmed = sql.trim().toUpperCase();
   if (trimmed.startsWith("SELECT")) return "SELECT";
+  if (trimmed.startsWith("SHOW")) return "SHOW";
+  if (trimmed.startsWith("DESC")) return "DESCRIBE";
   if (trimmed.startsWith("INSERT")) return "INSERT";
   if (trimmed.startsWith("UPDATE")) return "UPDATE";
   if (trimmed.startsWith("DELETE")) return "DELETE";
