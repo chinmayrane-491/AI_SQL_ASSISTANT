@@ -124,8 +124,8 @@ export default function QueryHistory({ onRunInChat }) {
   const avgLatency =
     totalCount > 0
       ? Math.round(
-          historyItems.reduce((acc, curr) => acc + (curr.executionTimeMs || 30), 0) / totalCount
-        )
+        historyItems.reduce((acc, curr) => acc + (curr.executionTimeMs || 30), 0) / totalCount
+      )
       : 35;
 
   return (
@@ -289,8 +289,8 @@ export default function QueryHistory({ onRunInChat }) {
               {searchQuery
                 ? `No execution records match "${searchQuery}". Try adjusting your filters.`
                 : currentRole === "admin"
-                ? "No queries have been executed across workspaces yet. Ask questions in AI SQL Chat to record history."
-                : `You haven't run any queries as ${currentRole.toUpperCase()} yet. Ask questions in the AI SQL Chat tab to generate and execute queries.`}
+                  ? "No queries have been executed across workspaces yet. Ask questions in AI SQL Chat to record history."
+                  : `You haven't run any queries as ${currentRole.toUpperCase()} yet. Ask questions in the AI SQL Chat tab to generate and execute queries.`}
             </p>
           </GlassCard>
         ) : (
