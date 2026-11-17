@@ -13,22 +13,7 @@
 **An enterprise-grade, multi-database conversational SQL platform powered by LangChain and Google Gemini LLM.**  
 *Natural Language to verified MySQL 8.0 with multi-role RBAC enforcement, AST injection defenses, destructive query confirmation guards, and real-time schema exploration.*
 
-[Live Demo Video](#-live-demo-video-runs-directly-in-readme) • [Key Features](#-key-features) • [LangChain Architecture](#-langchain-integration--architecture) • [Screenshots](#-screenshots--ui-showcase) • [Role Walkthrough](#-end-to-end-role-walkthrough--demo) • [Getting Started](#-getting-started) • [API Reference](#-api-endpoints)
-
-</div>
-
----
-
-## 🎬 Live Demo Video (Runs Directly in README)
-
-<div align="center">
-
-<img src="docs/screenshots/demo-walkthrough.gif" alt="MySQL AI Chatbot Live Demo Video Walkthrough" width="950" style="border-radius: 14px; box-shadow: 0 15px 40px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1);" />
-
-<p><em>🎥 <strong>Full Animated Walkthrough:</strong> 1-Click Role Login ➔ Reader RBAC Enforcement (SELECT vs Blocked Delete) ➔ Writer Confirmation Guard ➔ Admin Multi-DB Target Switching &amp; Deletion Modal.</em></p>
-
-[![Open Interactive Player](https://img.shields.io/badge/▶_Launch_Interactive_Video_Player-docs%2Fdemo--video.html-0284C7?style=for-the-badge&logo=html5&logoColor=white)](docs/demo-video.html)
-[![Recording Guide](https://img.shields.io/badge/📋_Recording_Script_Guide-docs%2FDEMO__VIDEO__GUIDE.md-2563EB?style=for-the-badge&logo=markdown&logoColor=white)](docs/DEMO_VIDEO_GUIDE.md)
+[Key Features](#-key-features) • [LangChain Architecture](#-langchain-integration--architecture) • [Screenshots](#-screenshots--ui-showcase) • [Role Architecture](#-end-to-end-role-architecture--security-flow) • [Getting Started](#-getting-started) • [API Reference](#-api-endpoints)
 
 </div>
 
@@ -187,7 +172,7 @@ This project leverages **LangChain Core (`@langchain/core`)** and **Google GenAI
 
 ---
 
-## 🎬 End-to-End Role Walkthrough & Demo
+## 🛡️ End-to-End Role Architecture & Security Flow
 
 This walkthrough demonstrates the end-to-end security cycle from **Login to Logout** across all three workspace roles.
 
