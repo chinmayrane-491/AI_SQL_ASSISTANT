@@ -82,6 +82,27 @@
 
 ---
 
+## 🎥 Video Demo & Live Walkthrough
+
+<div align="center">
+
+[![Watch Full Demo Video](https://img.shields.io/badge/▶_Watch_Full_Demo_Video-YouTube_/_Loom-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://youtu.be/YOUR_DEMO_VIDEO_LINK)
+[![Recording Script Guide](https://img.shields.io/badge/📋_View_Recording_Script-DEMO__VIDEO__GUIDE.md-2563EB?style=for-the-badge&logo=markdown&logoColor=white)](docs/DEMO_VIDEO_GUIDE.md)
+
+<p><em>(Click above to watch the end-to-end video recording of all 3 roles, query execution, and security guards.)</em></p>
+
+| Timestamp | Walkthrough Phase | What is Demonstrated |
+| :---: | :--- | :--- |
+| `0:00 - 0:30` | **Login Screen** | MySQL 8.0 branding, 1-click role auto-fill (`admin`, `writer`, `reader`). |
+| `0:30 - 1:15` | **Reader Role (Strict Read-Only)** | `SELECT` runs instantly; `UPDATE`/`DELETE` attempts are **strictly blocked by RBAC policy**. |
+| `1:15 - 2:00` | **Writer Role (Data Mutation)** | `SELECT` runs smoothly; `DELETE`/`UPDATE` triggers **⚠️ Destructive Confirmation Guard**; `DROP` is blocked. |
+| `2:00 - 2:45` | **Admin Role (Full Control)** | Full DDL/DML, dynamic database switching, visual table builder, and admin-only database deletion modal. |
+| `2:45 - 3:00` | **Security Architecture** | Rate limiting (`express-rate-limit`), AST injection defense, and least privilege database pools. |
+
+</div>
+
+---
+
 ## 🎬 End-to-End Role Walkthrough & Demo
 
 This walkthrough demonstrates the end-to-end security cycle from **Login to Logout** across all three workspace roles.
