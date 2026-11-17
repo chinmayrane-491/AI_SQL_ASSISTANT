@@ -3,16 +3,32 @@
 <div align="center">
 
 ![MySQL 8.0](https://img.shields.io/badge/MySQL-8.0-00758F?style=for-the-badge&logo=mysql&logoColor=white)
+![LangChain](https://img.shields.io/badge/LangChain-Core_&_Google-1C3C3C?style=for-the-badge&logo=langchain&logoColor=white)
 ![Gemini 2.5](https://img.shields.io/badge/Gemini_2.5_Flash-Google_AI-4285F4?style=for-the-badge&logo=google&logoColor=white)
 ![Node.js](https://img.shields.io/badge/Node.js-18+-339933?style=for-the-badge&logo=node.js&logoColor=white)
 ![React Vite](https://img.shields.io/badge/React_Vite-Tailwind_Glass-61DAFB?style=for-the-badge&logo=react&logoColor=black)
 ![Security RBAC](https://img.shields.io/badge/Security-RBAC_&_AST_Guard-E11D48?style=for-the-badge&logo=shield&logoColor=white)
 ![Rate Limited](https://img.shields.io/badge/Protected-Rate_Limited-10B981?style=for-the-badge&logo=fastapi&logoColor=white)
 
-**An intelligent, multi-database conversational SQL platform powered by Gemini LLM and LangChain.**  
+**An enterprise-grade, multi-database conversational SQL platform powered by LangChain and Google Gemini LLM.**  
 *Natural Language to verified MySQL 8.0 with multi-role RBAC enforcement, AST injection defenses, destructive query confirmation guards, and real-time schema exploration.*
 
-[Features](#-key-features) • [Screenshots](#-screenshots--ui-showcase) • [Role Security Walkthrough](#-end-to-end-role-walkthrough--demo) • [Architecture](#-architecture) • [Getting Started](#-getting-started) • [API Reference](#-api-endpoints)
+[Live Demo Video](#-live-demo-video-runs-directly-in-readme) • [Key Features](#-key-features) • [LangChain Architecture](#-langchain-integration--architecture) • [Screenshots](#-screenshots--ui-showcase) • [Role Walkthrough](#-end-to-end-role-walkthrough--demo) • [Getting Started](#-getting-started) • [API Reference](#-api-endpoints)
+
+</div>
+
+---
+
+## 🎬 Live Demo Video (Runs Directly in README)
+
+<div align="center">
+
+<img src="docs/screenshots/demo-walkthrough.gif" alt="MySQL AI Chatbot Live Demo Video Walkthrough" width="950" style="border-radius: 14px; box-shadow: 0 15px 40px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1);" />
+
+<p><em>🎥 <strong>Full Animated Walkthrough:</strong> 1-Click Role Login ➔ Reader RBAC Enforcement (SELECT vs Blocked Delete) ➔ Writer Confirmation Guard ➔ Admin Multi-DB Target Switching &amp; Deletion Modal.</em></p>
+
+[![Open Interactive Player](https://img.shields.io/badge/▶_Launch_Interactive_Video_Player-docs%2Fdemo--video.html-0284C7?style=for-the-badge&logo=html5&logoColor=white)](docs/demo-video.html)
+[![Recording Guide](https://img.shields.io/badge/📋_Recording_Script_Guide-docs%2FDEMO__VIDEO__GUIDE.md-2563EB?style=for-the-badge&logo=markdown&logoColor=white)](docs/DEMO_VIDEO_GUIDE.md)
 
 </div>
 
@@ -20,7 +36,8 @@
 
 ## 🌟 Key Features
 
-- **🧠 Conversational Natural Language to SQL:** Ask questions in plain English or natural language; the AI converts requests into optimized MySQL 8.0 queries with structured syntax validation.
+- **🧠 Conversational Natural Language to SQL:** Ask questions in plain English or natural language; LangChain and Gemini translate requests into optimized, verified MySQL 8.0 queries.
+- **🦜️🔗 LangChain Structured LLM Pipeline:** Uses LangChain's `ChatPromptTemplate` and `withStructuredOutput(Zod)` for deterministic, schema-validated SQL without hallucinated syntax.
 - **🛡️ Enterprise Multi-Role RBAC:**
   - **👑 Admin:** Full DDL & DML control (`CREATE`, `ALTER`, `DROP`, `TRUNCATE`, `INSERT`, `UPDATE`, `DELETE`, `SELECT`), database creation and permanent deletion.
   - **✍️ Writer:** Data modification permitted (`SELECT`, `INSERT`, `UPDATE`, `DELETE`). DDL operations are strictly blocked.
@@ -46,6 +63,75 @@
 
 ---
 
+## 🦜️🔗 LangChain Integration & Architecture
+
+This project leverages **LangChain Core (`@langchain/core`)** and **Google GenAI (`@langchain/google`)** to establish a structured, safe, and explainable AI-to-SQL execution lifecycle:
+
+```
+                      User Natural Language Query
+                                  │
+                                  ▼
+      ┌────────────────────────────────────────────────────────┐
+      │   1. Dynamic Schema Introspection (MySQL INFORMATION)  │
+      │   Tables, Columns, Data Types, Foreign Keys, Indexes   │
+      └───────────────────────────┬────────────────────────────┘
+                                  │
+                                  ▼
+      ┌────────────────────────────────────────────────────────┐
+      │   2. LangChain ChatPromptTemplate Context Injection    │
+      │   System Instructions + Formatted Schema + Safe Rules  │
+      └───────────────────────────┬────────────────────────────┘
+                                  │
+                                  ▼
+      ┌────────────────────────────────────────────────────────┐
+      │   3. LangChain withStructuredOutput(ZodSchema)         │
+      │   Guaranteed JSON output (SQL, Operation, Explanation) │
+      └───────────────────────────┬────────────────────────────┘
+                                  │
+                                  ▼
+      ┌────────────────────────────────────────────────────────┐
+      │   4. AST Security & RBAC Parser (node-sql-parser)      │
+      │   Multi-Statement Block + Role Permission Verification │
+      └───────────────────────────┬────────────────────────────┘
+                                  │
+                                  ▼
+      ┌────────────────────────────────────────────────────────┐
+      │   5. LangChain Result Explanation Chain                │
+      │   Natural Language Summary & Executive Insights        │
+      └────────────────────────────────────────────────────────┘
+```
+
+### Why LangChain?
+1. **Dynamic Schema Introspection:**
+   Instead of hardcoding table lists, LangChain queries `INFORMATION_SCHEMA` in real time, formats columns, primary keys, and foreign keys, and injects this live context into the prompt:
+   ```javascript
+   const schema = await getDatabaseSchema(targetDb);
+   const schemaText = formatSchemaForAI(schema);
+   const result = await sqlGenerationChain.invoke({
+       schema: schemaText,
+       question: question.trim()
+   });
+   ```
+
+2. **Guaranteed Schema Conformance via Zod:**
+   Using `modle.withStructuredOutput(sqlOutputSchema)` with **Zod**, LangChain forces the model to respond strictly with valid JSON conforming to our schema:
+   ```javascript
+   import { ChatPromptTemplate } from "@langchain/core/prompts";
+   import model from "../config/langchain.js";
+   import { sqlOutputSchema } from "../schemas/sql-output.schema.js";
+
+   const structuredModel = model.withStructuredOutput(sqlOutputSchema);
+   const sqlGenerationChain = sqlGenerationPrompt.pipe(structuredModel);
+   ```
+
+3. **Hallucination Prevention:**
+   LangChain's prompt enforces that if required values or columns are missing, it returns `operation = "none"` with `needs_clarification = true`, preventing false queries from touching the database.
+
+4. **Multi-Model Flexibility:**
+   Because the pipeline is built on LangChain's standard abstractions, switching from Google Gemini to Anthropic Claude or OpenAI GPT requires zero business logic changes.
+
+---
+
 ## 📸 Screenshots & UI Showcase
 
 <div align="center">
@@ -53,21 +139,21 @@
 ### 1. Modern Split Showcase Login Screen
 *High-tech enterprise datacenter visuals, authentic MySQL 8.0 brand mark, and 1-click workspace role selectors.*
 
-<img src="docs/screenshots/login-screen.jpg" alt="MySQL AI Chatbot Login Screen" width="850" style="border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);" />
+<img src="docs/screenshots/login-screen.jpg" alt="MySQL AI Chatbot Login Screen" width="900" style="border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);" />
 
 ---
 
 ### 2. Intelligent AI Chat Workspace & Results Table
 *Real-time conversational SQL generation, query explanations, and interactive tabular records viewer.*
 
-<img src="docs/screenshots/chat-workspace.jpg" alt="AI Chat Workspace" width="850" style="border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);" />
+<img src="docs/screenshots/chat-workspace.jpg" alt="AI Chat Workspace" width="900" style="border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);" />
 
 ---
 
 ### 3. Multi-Role RBAC Security Cards
 *Assigned roles, permitted query rules, write/DDL guards, and database connection pool separation.*
 
-<img src="docs/screenshots/rbac-role-cards.png" alt="RBAC Role Cards" width="850" style="border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);" />
+<img src="docs/screenshots/rbac-role-cards.png" alt="RBAC Role Cards" width="900" style="border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);" />
 
 ---
 
@@ -76,28 +162,14 @@
 
 | Database Environment Switcher | Active Tables Schema Overview |
 | :---: | :---: |
-| <img src="docs/screenshots/db-switcher.png" alt="Database Switcher" width="400" /> | <img src="docs/screenshots/tables-overview.png" alt="Tables Overview" width="400" /> |
-
-</div>
+| <img src="docs/screenshots/db-switcher.png" alt="Database Switcher" width="440" /> | <img src="docs/screenshots/tables-overview.png" alt="Tables Overview" width="440" /> |
 
 ---
 
-## 🎥 Video Demo & Live Walkthrough
+### 5. Database Environments & Admin Management
+*Create new databases and manage environments with Admin-Only deletion guards.*
 
-<div align="center">
-
-[![Watch Full Demo Video](https://img.shields.io/badge/▶_Watch_Full_Demo_Video-YouTube_/_Loom-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://youtu.be/YOUR_DEMO_VIDEO_LINK)
-[![Recording Script Guide](https://img.shields.io/badge/📋_View_Recording_Script-DEMO__VIDEO__GUIDE.md-2563EB?style=for-the-badge&logo=markdown&logoColor=white)](docs/DEMO_VIDEO_GUIDE.md)
-
-<p><em>(Click above to watch the end-to-end video recording of all 3 roles, query execution, and security guards.)</em></p>
-
-| Timestamp | Walkthrough Phase | What is Demonstrated |
-| :---: | :--- | :--- |
-| `0:00 - 0:30` | **Login Screen** | MySQL 8.0 branding, 1-click role auto-fill (`admin`, `writer`, `reader`). |
-| `0:30 - 1:15` | **Reader Role (Strict Read-Only)** | `SELECT` runs instantly; `UPDATE`/`DELETE` attempts are **strictly blocked by RBAC policy**. |
-| `1:15 - 2:00` | **Writer Role (Data Mutation)** | `SELECT` runs smoothly; `DELETE`/`UPDATE` triggers **⚠️ Destructive Confirmation Guard**; `DROP` is blocked. |
-| `2:00 - 2:45` | **Admin Role (Full Control)** | Full DDL/DML, dynamic database switching, visual table builder, and admin-only database deletion modal. |
-| `2:45 - 3:00` | **Security Architecture** | Rate limiting (`express-rate-limit`), AST injection defense, and least privilege database pools. |
+<img src="docs/screenshots/db-environments.png" alt="Database Environments" width="900" style="border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);" />
 
 </div>
 
@@ -171,7 +243,7 @@ flowchart TD
 
 ---
 
-## 🏗️ Architecture
+## 🏗️ Technical Architecture
 
 ```
                                       ┌─────────────────────────────────────────┐
@@ -192,9 +264,9 @@ flowchart TD
                                 ┌──────────────────────────┴──────────────────────────┐
                                 ▼                                                     ▼
                   ┌───────────────────────────┐                         ┌───────────────────────────┐
-                  │    Gemini 2.5 + LangChain │                         │  node-sql-parser (AST)    │
+                  │    LangChain + Gemini 2.5 │                         │  node-sql-parser (AST)    │
                   │  - Schema Ingestion       │                         │  - Statement Count Check  │
-                  │  - Structured Output      │                         │  - Operation Type Guard   │
+                  │  - Zod Structured Output  │                         │  - Operation Type Guard   │
                   │  - Natural Explanation    │                         │  - WHERE Clause Audit     │
                   └─────────────┬─────────────┘                         └─────────────┬─────────────┘
                                 │                                                     │
@@ -236,7 +308,7 @@ flowchart TD
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/<YOUR_USERNAME>/AI_SQL_Assistant.git
+git clone https://github.com/chinmayrane-491/AI_SQL_Assistant.git
 cd AI_SQL_Assistant
 ```
 
@@ -300,40 +372,6 @@ Frontend will start on `http://localhost:5173`.
 
 ---
 
-### 4. Database Setup (Optional Seed)
-Create the database in MySQL:
-```sql
-CREATE DATABASE IF NOT EXISTS ai_sql_assistant;
-USE ai_sql_assistant;
-
-CREATE TABLE IF NOT EXISTS customers (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    email VARCHAR(255) NOT NULL UNIQUE,
-    status ENUM('active', 'inactive') DEFAULT 'active',
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE IF NOT EXISTS products (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    product_name VARCHAR(255) NOT NULL,
-    price DECIMAL(10, 2) NOT NULL,
-    category VARCHAR(100) NOT NULL,
-    stock INT DEFAULT 0
-);
-
-CREATE TABLE IF NOT EXISTS orders (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    customer_id INT NOT NULL,
-    total_amount DECIMAL(10, 2) NOT NULL,
-    status ENUM('pending', 'completed', 'cancelled') DEFAULT 'pending',
-    order_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (customer_id) REFERENCES customers(id)
-);
-```
-
----
-
 ## 🔑 Demo Credentials
 
 | Role | Email | Password | Access Level |
@@ -359,18 +397,9 @@ CREATE TABLE IF NOT EXISTS orders (
 
 ---
 
-## 🛡️ Security Implementation Details
-
-1. **AST Parsing & Validation:** Every query passes through `validateSQL()` using `node-sql-parser`. Multi-statements separated by `;` are rejected before hitting the database driver.
-2. **WHERE Clause Guard:** `UPDATE` and `DELETE` queries are verified to ensure they have valid `column_ref` conditions. Blanket `WHERE 1=1` or `WHERE TRUE` conditions are blocked.
-3. **Database Drop Safeguards:** System databases (`mysql`, `information_schema`, `performance_schema`, `sys`) and production root (`ai_sql_assistant`) are strictly protected from deletion.
-4. **Execution Timeout:** Sessions enforce `SET SESSION max_execution_time = 5000` to prevent unindexed queries from hanging the connection pool.
-
----
-
 ## 📄 License
 This project is licensed under the [ISC License](LICENSE).
 
 <div align="center">
-  <sub>Built with ❤️ by <strong>Chinmay</strong> using Google Gemini &amp; MySQL</sub>
+  <sub>Built with ❤️ by <strong>Chinmay</strong> using LangChain, Google Gemini &amp; MySQL</sub>
 </div>
