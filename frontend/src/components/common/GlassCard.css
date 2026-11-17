@@ -1,0 +1,67 @@
+.glass-card {
+  position: relative;
+  background: var(--glass-surface);
+  backdrop-filter: var(--blur-glass);
+  -webkit-backdrop-filter: var(--blur-glass);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-glass);
+  transition: all var(--transition-normal);
+  overflow: hidden;
+}
+
+.glass-card--elevated {
+  background: var(--glass-surface-elevated);
+  box-shadow: var(--shadow-glass-lg);
+  border-color: rgba(255, 255, 255, 0.95);
+}
+
+.glass-card--pad-none {
+  padding: 0;
+}
+
+.glass-card--pad-small {
+  padding: 16px;
+}
+
+.glass-card--pad-default {
+  padding: 32px;
+}
+
+.glass-card--pad-large {
+  padding: 44px;
+}
+
+/* Subtle Apple top specular glow reflection */
+.glass-card-reflection {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 20px;
+  background: var(--glass-reflection);
+  pointer-events: none;
+  border-top-left-radius: inherit;
+  border-top-right-radius: inherit;
+}
+
+[data-theme="dark"] .glass-card {
+  box-shadow: 0 14px 36px -10px rgba(0, 0, 0, 0.65), 0 1px 0 0 rgba(255, 255, 255, 0.1) inset;
+}
+
+.glass-card-content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+}
+
+@media (max-width: 640px) {
+  .glass-card--pad-default {
+    padding: 24px;
+  }
+
+  .glass-card--pad-large {
+    padding: 28px;
+  }
+}

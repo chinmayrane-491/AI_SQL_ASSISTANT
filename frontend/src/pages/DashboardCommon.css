@@ -1,0 +1,319 @@
+.dashboard-content {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+/* Workspace Hero */
+.workspace-hero {
+  margin-bottom: 4px;
+}
+
+.hero-title {
+  font-size: 1.85rem;
+  font-weight: 700;
+  color: var(--text-main);
+  letter-spacing: -0.03em;
+  margin-bottom: 6px;
+}
+
+.hero-subtitle {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+}
+
+.hero-subtitle strong {
+  color: var(--primary);
+  font-family: monospace;
+}
+
+/* Metrics Grid */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.metric-card {
+  padding: 16px 18px !important;
+  transition: all var(--transition-normal);
+}
+
+.metric-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-card-elevated);
+}
+
+.metric-card .glass-card-content {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  min-width: 0;
+}
+
+.metric-icon-badge {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.metric-icon-badge--purple {
+  background: var(--role-admin-bg);
+  color: var(--role-admin-color);
+  border: 1px solid var(--role-admin-border);
+}
+
+.metric-icon-badge--blue {
+  background: var(--role-writer-bg);
+  color: var(--role-writer-color);
+  border: 1px solid var(--role-writer-border);
+}
+
+.metric-icon-badge--green {
+  background: var(--role-reader-bg);
+  color: var(--role-reader-color);
+  border: 1px solid var(--role-reader-border);
+}
+
+.metric-icon-badge--orange {
+  background: var(--warning-subtle);
+  color: var(--warning);
+  border: 1px solid var(--warning-border);
+}
+
+.metric-data {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
+}
+
+.metric-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.metric-value {
+  font-size: clamp(0.95rem, 1.1vw, 1.15rem);
+  font-weight: 700;
+  color: var(--text-main);
+  letter-spacing: -0.02em;
+  margin: 2px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  width: 100%;
+}
+
+.metric-caption {
+  font-size: 0.72rem;
+  color: var(--text-subtle);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Launchpad to AI Chat */
+.chat-launchpad-card {
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.06) 0%, rgba(124, 58, 237, 0.06) 100%);
+  border: 1px solid var(--primary-glow);
+  padding: 22px 28px !important;
+}
+
+[data-theme="dark"] .chat-launchpad-card {
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.1) 0%, rgba(124, 58, 237, 0.08) 100%);
+  border: 1px solid rgba(59, 130, 246, 0.28);
+}
+
+.chat-launchpad-card .glass-card-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  width: 100%;
+}
+
+.launchpad-info {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex: 1;
+  min-width: 0;
+}
+
+.chat-launchpad-card .btn {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.launchpad-sparkle {
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(135deg, #2563EB 0%, #7C3AED 100%);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 8px 20px -4px rgba(37, 99, 235, 0.4);
+}
+
+.launchpad-info h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.launchpad-info p {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+}
+
+/* Table Summary Overview */
+.dashboard-section-block {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.section-title-sub {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.tables-overview-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.table-quick-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.table-quick-icon {
+  color: var(--primary);
+  margin-bottom: 4px;
+}
+
+.table-quick-card h4 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  font-family: monospace;
+}
+
+.table-quick-card p {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+  margin-bottom: 8px;
+}
+
+.table-pill {
+  align-self: flex-start;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  background: var(--primary-subtle);
+  color: var(--primary);
+  border: 1px solid var(--primary-glow);
+}
+
+/* Placeholder card for history/settings tabs */
+.placeholder-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 400px;
+  gap: 12px;
+}
+
+.placeholder-icon {
+  color: var(--primary);
+  opacity: 0.8;
+  margin-bottom: 4px;
+}
+
+.placeholder-card h3 {
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.placeholder-card p {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  max-width: 480px;
+}
+
+@media (max-width: 1024px) {
+  .metrics-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .tables-overview-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .chat-launchpad-card .glass-card-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 18px;
+  }
+}
+
+@media (max-width: 640px) {
+  .dashboard-content {
+    gap: 16px;
+  }
+
+  .metrics-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .hero-title {
+    font-size: 1.35rem;
+  }
+
+  .hero-subtitle {
+    font-size: 0.84rem;
+  }
+
+  .metric-card {
+    padding: 12px 14px !important;
+  }
+
+  .metric-icon-badge {
+    width: 38px;
+    height: 38px;
+  }
+
+  .chat-launchpad-card {
+    padding: 16px 18px !important;
+  }
+
+  .chat-launchpad-card .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}

@@ -1,0 +1,723 @@
+/* ==========================================================================
+   MySQL AI Chatbot - PSD Split Showcase Login Page
+   Inspired by user reference design with authentic MySQL Branding & Tech Background
+   ========================================================================== */
+
+.psd-login-wrapper {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  background: linear-gradient(135deg, #ff4e26 0%, #ff1f5a 40%, #e11d48 70%, #9333ea 100%);
+  overflow: hidden;
+}
+
+/* Warm Diagonal Background Geometry */
+.bg-diagonal-accent {
+  position: absolute;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.22;
+}
+
+.bg-diagonal-accent--1 {
+  width: 180%;
+  height: 220px;
+  background: linear-gradient(90deg, transparent, #ffffff, transparent);
+  transform: rotate(-35deg) translateY(-200px);
+  top: 0;
+}
+
+.bg-diagonal-accent--2 {
+  width: 160%;
+  height: 160px;
+  background: linear-gradient(90deg, #ff8a00, transparent);
+  transform: rotate(-35deg) translateY(240px);
+  bottom: 0;
+}
+
+.bg-diagonal-accent--3 {
+  width: 140%;
+  height: 300px;
+  background: linear-gradient(180deg, rgba(255, 42, 95, 0.4), transparent);
+  transform: rotate(25deg);
+  top: -100px;
+  right: -200px;
+}
+
+/* Main Split Floating Card */
+.psd-login-card {
+  position: relative;
+  z-index: 10;
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+  width: 100%;
+  max-width: 980px;
+  min-height: 590px;
+  background: #ffffff;
+  border-radius: 24px;
+  box-shadow: 0 35px 80px -15px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.2);
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+/* --------------------------------------------------------------------------
+   LEFT SHOWCASE PANEL (High-Tech MySQL Datacenter & Brand Identity)
+   -------------------------------------------------------------------------- */
+.psd-left-showcase {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 42px 40px;
+  color: #ffffff;
+  overflow: hidden;
+  background: #020617;
+}
+
+/* Premium Enterprise Datacenter Background */
+.showcase-bg-image {
+  position: absolute;
+  inset: 0;
+  background-image: url('https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=1400&q=80');
+  background-size: cover;
+  background-position: center;
+  transform: scale(1.04);
+  transition: transform 10s ease;
+  z-index: 1;
+}
+
+.psd-login-card:hover .showcase-bg-image {
+  transform: scale(1.08);
+}
+
+/* Subtle Cybernetic Grid Pattern */
+.showcase-tech-grid-overlay {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0, 117, 143, 0.12) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 117, 143, 0.12) 1px, transparent 1px);
+  background-size: 32px 32px;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0.6;
+}
+
+/* Dark Tech Vignette Overlay */
+.showcase-gradient-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg,
+      rgba(2, 6, 23, 0.72) 0%,
+      rgba(2, 6, 23, 0.84) 50%,
+      rgba(2, 6, 23, 0.94) 100%);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  z-index: 3;
+}
+
+.showcase-content {
+  position: relative;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: space-between;
+}
+
+/* Proper MySQL Logo & Brand Header */
+.mysql-brand-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.mysql-logo-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.mysql-logo-icon-box {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(0, 117, 143, 0.3) 0%, rgba(242, 145, 17, 0.25) 100%);
+  border: 1px solid rgba(0, 180, 216, 0.5);
+  box-shadow: 0 0 16px rgba(0, 180, 216, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.mysql-db-icon {
+  color: #38bdf8;
+}
+
+.mysql-dolphin-icon {
+  position: absolute;
+  bottom: -2px;
+  right: -4px;
+  font-size: 1.15rem;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+}
+
+.mysql-brand-titles {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.mysql-logo-title-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.mysql-main-logo-text {
+  font-size: 1.35rem;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+.mysql-tag-chip {
+  font-size: 0.68rem;
+  font-weight: 800;
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: #f29111;
+  /* Official MySQL Orange */
+  color: #ffffff;
+  letter-spacing: 0.04em;
+}
+
+.mysql-sub-logo-tag {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #94a3b8;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.mysql-status-live-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  border-radius: 9999px;
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: #34d399;
+  letter-spacing: 0.02em;
+}
+
+.live-status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 8px #10b981;
+  animation: livePulse 2s infinite;
+}
+
+@keyframes livePulse {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.6);
+  }
+
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 6px rgba(16, 185, 129, 0);
+  }
+
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+  }
+}
+
+/* Bold Headline */
+.showcase-headline-group {
+  margin: 12px 0 20px 0;
+}
+
+.showcase-headline {
+  font-size: 3.1rem;
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  color: #ffffff;
+  margin: 0 0 14px 0;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+.showcase-description {
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.88);
+  margin: 0;
+  max-width: 420px;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+/* Feature Highlights */
+.showcase-features-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.showcase-feature-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.86rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.94);
+}
+
+.feature-icon {
+  color: #38bdf8;
+  flex-shrink: 0;
+}
+
+/* Tech Specs Footer */
+.showcase-footer-note {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.76rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.65);
+  font-weight: 600;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.footer-tech-tag {
+  color: #94a3b8;
+}
+
+.footer-tech-divider {
+  color: #475569;
+}
+
+/* --------------------------------------------------------------------------
+   RIGHT FORM PANEL
+   -------------------------------------------------------------------------- */
+.psd-right-form-panel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 44px 46px;
+  background: #ffffff;
+}
+
+.form-header-area {
+  margin-bottom: 20px;
+}
+
+.form-title {
+  font-size: 2.1rem;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.02em;
+  margin: 0 0 6px 0;
+}
+
+.form-subtitle {
+  font-size: 0.85rem;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.psd-error-alert {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #dc2626;
+  font-size: 0.82rem;
+  font-weight: 500;
+  margin-bottom: 16px;
+}
+
+.psd-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* Role Selector Pills */
+.psd-role-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.psd-role-pills {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.psd-role-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 9px 10px;
+  border-radius: 10px;
+  background: #f8fafc;
+  border: 1.5px solid #e2e8f0;
+  color: #475569;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.psd-role-pill:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+}
+
+.psd-role-pill--active.psd-role-pill--admin {
+  background: #f5f3ff;
+  border-color: #8b5cf6;
+  color: #7c3aed;
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.15);
+}
+
+.psd-role-pill--active.psd-role-pill--writer {
+  background: #eff6ff;
+  border-color: #3b82f6;
+  color: #2563eb;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
+}
+
+.psd-role-pill--active.psd-role-pill--reader {
+  background: #ecfdf5;
+  border-color: #10b981;
+  color: #059669;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);
+}
+
+/* Fields */
+.psd-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.psd-field-label {
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: #475569;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.psd-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  border-bottom: 2px solid #e2e8f0;
+  transition: border-color 0.2s ease;
+  padding: 4px 0;
+}
+
+.psd-input-wrapper:focus-within {
+  border-color: #ff2a5f;
+}
+
+.psd-input-wrapper--error {
+  border-color: #ef4444 !important;
+}
+
+.psd-input-icon {
+  color: #94a3b8;
+  flex-shrink: 0;
+  margin-right: 8px;
+}
+
+.psd-input {
+  width: 100%;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #0f172a;
+  padding: 6px 0;
+}
+
+.psd-input::placeholder {
+  color: #94a3b8;
+  font-weight: 400;
+}
+
+.psd-pwd-toggle {
+  background: none;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  transition: color 0.2s ease;
+}
+
+.psd-pwd-toggle:hover {
+  color: #0f172a;
+}
+
+.psd-field-error {
+  font-size: 0.75rem;
+  color: #ef4444;
+  margin-top: 2px;
+}
+
+/* Utilities */
+.psd-utilities-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-top: 2px;
+}
+
+.psd-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.psd-checkbox {
+  display: none;
+}
+
+.psd-checkbox-custom {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 1.5px solid #cbd5e1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  background: #ffffff;
+  transition: all 0.2s ease;
+}
+
+.psd-checkbox:checked+.psd-checkbox-custom {
+  background: #ff2a5f;
+  border-color: #ff2a5f;
+}
+
+.psd-checkbox-text {
+  font-size: 0.8rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+/* Crimson Pill Submit Button */
+.psd-submit-pill-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 48px;
+  border-radius: 9999px;
+  border: none;
+  background: linear-gradient(135deg, #ff2a5f 0%, #e11d48 100%);
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  box-shadow: 0 12px 28px -6px rgba(225, 29, 72, 0.45);
+  transition: all 0.2s ease;
+  margin-top: 6px;
+}
+
+.psd-submit-pill-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 32px -6px rgba(225, 29, 72, 0.6);
+  background: linear-gradient(135deg, #ff1f55 0%, #be123c 100%);
+}
+
+.psd-submit-pill-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.psd-submit-pill-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.psd-btn-loading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.psd-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: psdSpin 0.8s linear infinite;
+}
+
+@keyframes psdSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Clean Role Guidance Footer */
+.psd-form-footer-hint {
+  margin-top: 24px;
+  padding: 12px 14px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  text-align: center;
+  font-size: 0.78rem;
+  color: #64748b;
+  line-height: 1.4;
+}
+
+.psd-form-footer-hint strong {
+  color: #0f172a;
+}
+
+/* --------------------------------------------------------------------------
+   DARK THEME OVERRIDES
+   -------------------------------------------------------------------------- */
+[data-theme="dark"] .psd-login-card {
+  background: #0f172a;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 35px 80px -15px rgba(0, 0, 0, 0.7);
+}
+
+[data-theme="dark"] .psd-right-form-panel {
+  background: #0f172a;
+}
+
+[data-theme="dark"] .form-title {
+  color: #f8fafc;
+}
+
+[data-theme="dark"] .form-subtitle {
+  color: #94a3b8;
+}
+
+[data-theme="dark"] .psd-field-label {
+  color: #94a3b8;
+}
+
+[data-theme="dark"] .psd-input {
+  color: #f8fafc;
+}
+
+[data-theme="dark"] .psd-input-wrapper {
+  border-bottom-color: #334155;
+}
+
+[data-theme="dark"] .psd-role-pill {
+  background: #1e293b;
+  border-color: #334155;
+  color: #cbd5e1;
+}
+
+[data-theme="dark"] .psd-role-pill:hover {
+  background: #334155;
+}
+
+[data-theme="dark"] .psd-checkbox-custom {
+  background: #1e293b;
+  border-color: #475569;
+}
+
+[data-theme="dark"] .psd-form-footer-hint {
+  background: #1e293b;
+  border-color: #334155;
+  color: #94a3b8;
+}
+
+[data-theme="dark"] .psd-form-footer-hint strong {
+  color: #f8fafc;
+}
+
+/* --------------------------------------------------------------------------
+   RESPONSIVE DESIGN (TABLET & MOBILE)
+   -------------------------------------------------------------------------- */
+@media (max-width: 860px) {
+  .psd-login-card {
+    grid-template-columns: 1fr;
+    max-width: 500px;
+    min-height: auto;
+  }
+
+  .psd-left-showcase {
+    padding: 32px 28px;
+    min-height: 250px;
+  }
+
+  .showcase-headline {
+    font-size: 2.2rem;
+  }
+
+  .showcase-description,
+  .showcase-features-list,
+  .showcase-footer-note {
+    display: none;
+  }
+
+  .psd-right-form-panel {
+    padding: 32px 28px;
+  }
+
+  .form-title {
+    font-size: 1.7rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .psd-login-wrapper {
+    padding: 16px 12px;
+  }
+
+  .psd-login-card {
+    border-radius: 18px;
+  }
+
+  .psd-right-form-panel {
+    padding: 24px 18px;
+  }
+}
