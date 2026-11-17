@@ -4,6 +4,9 @@ const parser = new Parser();
 
 const SUPPORTED_OPERATIONS = [
     "select",
+    "show",
+    "desc",
+    "describe",
     "insert",
     "update",
     "delete",
@@ -45,7 +48,7 @@ export function classifySQL(sql) {
     return {
         operation,
         sql,
-        isReadOnly: operation === "select",
+        isReadOnly: ["select", "show", "desc", "describe"].includes(operation),
         requiresWritePermission:
             ["insert", "update", "delete"].includes(operation),
         requiresAdminPermission:

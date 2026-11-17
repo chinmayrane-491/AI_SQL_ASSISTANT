@@ -2,6 +2,9 @@
 export const ROLE_PERMISSIONS = {
     admin: [
         "select",
+        "show",
+        "desc",
+        "describe",
         "insert",
         "update",
         "delete",
@@ -13,16 +16,25 @@ export const ROLE_PERMISSIONS = {
 
     writer: [
         "select",
+        "show",
+        "desc",
+        "describe",
         "insert",
         "update",
         "delete"
     ],
 
     reader: [
-        "select"
+        "select",
+        "show",
+        "desc",
+        "describe"
     ],
 
     user: [
-        "select"
+        "select",
+        "show",
+        "desc",
+        "describe"
     ]
 };

@@ -5,6 +5,9 @@ export const sqlOutputSchema = z.object({
 
     operation: z.enum([
         "select",
+        "show",
+        "desc",
+        "describe",
         "insert",
         "update",
         "delete",

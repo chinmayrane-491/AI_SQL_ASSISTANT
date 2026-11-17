@@ -9,6 +9,9 @@ const MAX_ROWS = 100;
 
 const ALLOWED_OPERATIONS = new Set([
     "select",
+    "show",
+    "desc",
+    "describe",
     "insert",
     "update",
     "delete",
@@ -16,6 +19,13 @@ const ALLOWED_OPERATIONS = new Set([
     "alter",
     "drop",
     "truncate"
+]);
+
+const READ_OPERATIONS = new Set([
+    "select",
+    "show",
+    "desc",
+    "describe"
 ]);
 
 function getTableNames(sql) {
@@ -131,9 +141,12 @@ export async function validateSQL(sql, expectedOperation = "select", targetDb = 
 
     // 5. AI operation vs actual SQL operation
     if (actualOperation !== expectedOperation.toLowerCase()) {
-        throw new Error(
-            `Operation mismatch. Expected ${expectedOperation}, but SQL contains ${actualOperation}.`
-        );
+        const isBothRead = READ_OPERATIONS.has(actualOperation) && READ_OPERATIONS.has(expectedOperation.toLowerCase());
+        if (!isBothRead) {
+            throw new Error(
+                `Operation mismatch. Expected ${expectedOperation}, but SQL contains ${actualOperation}.`
+            );
+        }
     }
 
     // 6. SELECT-specific security
@@ -188,6 +201,28 @@ export async function validateSQL(sql, expectedOperation = "select", targetDb = 
             .map((item) => item.table)
             .filter(Boolean);
 
+    } else if (actualOperation === "show" || actualOperation === "desc" || actualOperation === "describe") {
+        const showKeyword = ast.keyword?.toLowerCase();
+        if (showKeyword === "tables" || showKeyword === "databases") {
+            // SHOW TABLES / SHOW DATABASES - safe metadata inspection
+            tables = [];
+        } else {
+            let showTable = null;
+            if (ast.table) {
+                showTable = typeof ast.table === "string" ? ast.table : ast.table.table;
+            } else if (ast.from && Array.isArray(ast.from) && ast.from[0]?.table) {
+                showTable = ast.from[0].table;
+            }
+
+            if (showTable) {
+                if (!allowedTables.has(showTable.toLowerCase())) {
+                    throw new Error(`Table is not allowed: ${showTable}`);
+                }
+                tables = [showTable];
+            } else {
+                tables = [];
+            }
+        }
     } else {
 
         tables = getTableNames(normalizedSQL);

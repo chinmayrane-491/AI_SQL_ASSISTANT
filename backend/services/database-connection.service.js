@@ -3,6 +3,13 @@ import readerDB from "../config/db.reader.js";
 import writerDB from "../config/db.writer.js";
 import adminDB from "../config/db.admin.js";
 
+const READ_OPERATIONS = [
+    "select",
+    "show",
+    "desc",
+    "describe"
+];
+
 const WRITE_OPERATIONS = [
     "insert",
     "update",
@@ -21,18 +28,18 @@ export function getDatabaseConnection(role, operation) {
     const normalizedRole = (role || "reader").toLowerCase();
     const normalizedOperation = (operation || "select").toLowerCase();
 
-    // Reader or User: SELECT only
+    // Reader or User: READ only
     if (
         (normalizedRole === "user" || normalizedRole === "reader") &&
-        normalizedOperation === "select"
+        READ_OPERATIONS.includes(normalizedOperation)
     ) {
         return readerDB;
     }
 
-    // Writer: SELECT (uses reader pool)
+    // Writer: READ (uses reader pool)
     if (
         normalizedRole === "writer" &&
-        normalizedOperation === "select"
+        READ_OPERATIONS.includes(normalizedOperation)
     ) {
         return readerDB;
     }
@@ -45,10 +52,10 @@ export function getDatabaseConnection(role, operation) {
         return writerDB;
     }
 
-    // Admin: SELECT
+    // Admin: READ
     if (
         normalizedRole === "admin" &&
-        normalizedOperation === "select"
+        READ_OPERATIONS.includes(normalizedOperation)
     ) {
         return readerDB;
     }

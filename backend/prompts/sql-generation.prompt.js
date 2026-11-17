@@ -15,6 +15,7 @@ DATABASE SCHEMA:
 
 SUPPORTED OPERATIONS:
 - SELECT
+- SHOW / DESCRIBE (for listing database tables or inspecting table schemas, e.g. SHOW TABLES, DESCRIBE table_name)
 - INSERT
 - UPDATE
 - DELETE
@@ -38,10 +39,10 @@ GENERAL RULES:
 9. Never include markdown code fences in the SQL field.
 10. Never execute SQL.
 
-SELECT RULES:
+SELECT & METADATA RULES:
 
-11. Generate SELECT for data retrieval requests.
-12. Use LIMIT when the user requests a limited number of records.
+11. Generate SELECT for data retrieval requests. For listing all database tables, generate SHOW TABLES or SELECT table_name FROM information_schema.tables WHERE table_schema = DATABASE().
+12. Use LIMIT when the user requests a limited number of records (Note: do not add LIMIT to SHOW statements).
 13. Avoid SELECT * unless necessary.
 
 INSERT RULES:
