@@ -125,48 +125,44 @@ This project leverages **LangChain Core (`@langchain/core`)** and **Google GenAI
 <div align="center">
 
 ### 1. Modern Split Showcase Login Screen
-*High-tech enterprise datacenter visuals, authentic MySQL 8.0 brand mark, and 1-click workspace role selectors.*
+*High-tech enterprise datacenter visuals, authentic MySQL 8.0 brand mark, and 1-click workspace role selectors (Admin, Writer, Reader).*
 
-<img src="docs/screenshots/login-screen.jpg" alt="MySQL AI Chatbot Login Screen" width="900" style="border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);" />
-
----
-
-### 2. Intelligent AI Chat Workspace & Results Table
-*Real-time conversational SQL generation, query explanations, and interactive tabular records viewer.*
-
-<img src="docs/screenshots/chat-workspace.jpg" alt="AI Chat Workspace" width="900" style="border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);" />
+<img src="docs/screenshots/01-login-screen.jpg" alt="MySQL AI Chatbot Login Screen" width="920" style="border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);" />
 
 ---
 
-### 3. Multi-Role RBAC Security Cards
-*Assigned roles, permitted query rules, write/DDL guards, and database connection pool separation.*
+### 2. Admin Database Control Center & Live Switcher
+*Executive system overview, active target database status, live target database dropdown switcher, and schema tables overview cards.*
 
-<img src="docs/screenshots/rbac-role-cards.png" alt="RBAC Role Cards" width="900" style="border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);" />
-
----
-
-### 4. Database Environments & Instant Target Switching
-*Switch between production, analytics warehouse, and user-created databases with live table counts.*
-
-| Database Environment Switcher | Active Tables Schema Overview |
-| :---: | :---: |
-| <img src="docs/screenshots/db-switcher.png" alt="Database Switcher" width="440" /> | <img src="docs/screenshots/tables-overview.png" alt="Tables Overview" width="440" /> |
+<img src="docs/screenshots/02-admin-dashboard.jpg" alt="Admin Database Control Center" width="920" style="border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);" />
 
 ---
 
-### 5. Database Environments & Admin Management
-*Create new databases and manage environments with Admin-Only deletion guards.*
+### 3. Intelligent AI SQL Chat Workspace
+*Real-time conversational SQL workspace powered by LangChain and Google Gemini, featuring dynamic schema context and role-specific suggestion pills.*
 
-<img src="docs/screenshots/db-environments.png" alt="Database Environments" width="900" style="border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);" />
+<img src="docs/screenshots/03-chat-workspace.jpg" alt="AI SQL Chat Workspace" width="920" style="border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);" />
 
 ---
 
-### 6. Role-Isolated Query Execution History & Enterprise Audit Trail
-*User/Role-isolated query history: Readers and Writers only see their own query executions, while Admins view and filter across all roles with user attribution badges and 1-click JSON export.*
+### 4. Verified Query Execution & Tabular Data Viewer
+*Execution of verified MySQL queries (e.g. `SHOW TABLES`) with natural language AI explanations, interactive SQL copy/execute controls, and tabular result records.*
 
-| 👑 Admin Unified Audit View (All Roles & Filters) | 📖 Reader Isolated View (Self Queries Only) |
-| :---: | :---: |
-| <img src="docs/screenshots/query-history.png" alt="Admin Unified Query History" width="440" style="border-radius: 8px;" /> | <img src="docs/screenshots/reader-query-history.png" alt="Reader Isolated Query History" width="440" style="border-radius: 8px;" /> |
+<img src="docs/screenshots/04-query-results.jpg" alt="Query Execution and Results Viewer" width="920" style="border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);" />
+
+---
+
+### 5. Role-Isolated Query Execution History & Audit Log
+*Day-wise audit trail with query execution latency metrics, success rate indicators, syntax-highlighted SQL preview, search filtering, and 1-click JSON export.*
+
+<img src="docs/screenshots/05-query-history.jpg" alt="Query Execution History" width="920" style="border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);" />
+
+---
+
+### 6. Database Environments & Visual DDL Table Creator
+*Multi-database environment management, instant target switching, admin-only deletion guards, and interactive visual DDL table builder.*
+
+<img src="docs/screenshots/06-db-environments.jpg" alt="Database Environments and Settings" width="920" style="border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);" />
 
 </div>
 
